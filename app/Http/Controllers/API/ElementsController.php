@@ -55,7 +55,7 @@ class ElementsController extends Controller
         }
         $last_id  = Element::orderBy('id', 'desc')->first();
         if($last_id){
-            $last_id = $last_id->id ?? 1;
+            $last_id = $last_id->id;
         }
         $parent = Element::find($r->parent);
         if($parent){
