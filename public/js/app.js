@@ -2000,15 +2000,50 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 mini_toastr__WEBPACK_IMPORTED_MODULE_0__["default"].init();
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       elements: null,
+      elements_edit: null,
       new_name: null,
       new_colour: '#6DCFF6',
-      new_parent: 0
+      new_parent: 0,
+      edit_name: null,
+      edit_id: null
     };
   },
   mounted: function mounted() {
@@ -2079,14 +2114,32 @@ mini_toastr__WEBPACK_IMPORTED_MODULE_0__["default"].init();
         mini_toastr__WEBPACK_IMPORTED_MODULE_0__["default"].error(error, 'error');
       });
     },
-    eliminar: function eliminar(id) {
+    update_element: function update_element(id, name) {
       var _this2 = this;
+
+      var formData = new FormData();
+      formData.append('name', name);
+      formData.append('_method', 'PATCH');
+      axios.post('api/elements/' + id, formData).then(function (response) {
+        mini_toastr__WEBPACK_IMPORTED_MODULE_0__["default"].success(response.msg, 'Elemento ingresado');
+
+        _this2.get_elements();
+      })["catch"](function (error) {
+        mini_toastr__WEBPACK_IMPORTED_MODULE_0__["default"].error(error, 'error');
+      });
+    },
+    update_modal: function update_modal(id, nombre, padre) {
+      this.edit_id = id;
+      this.edit_name = nombre;
+    },
+    eliminar: function eliminar(id) {
+      var _this3 = this;
 
       var formData2 = new FormData();
       formData2.append('id', id);
       formData2.append('_method', 'DELETE');
       axios.post('api/elements/' + id, formData2).then(function (response) {
-        _this2.get_elements();
+        _this3.get_elements();
 
         mini_toastr__WEBPACK_IMPORTED_MODULE_0__["default"].error('Ok.', 'Elemento eliminado');
       })["catch"](function (error) {
@@ -2094,12 +2147,12 @@ mini_toastr__WEBPACK_IMPORTED_MODULE_0__["default"].init();
       });
     },
     get_elements: function get_elements() {
-      var _this3 = this;
+      var _this4 = this;
 
       axios.get('/api/elements').then(function (response) {
-        _this3.elements = response.data.elements;
-        _this3.last_sequence = response.data.last_sequence;
-        _this3.new_colour = response.data.default_colour;
+        _this4.elements = response.data.elements;
+        _this4.last_sequence = response.data.last_sequence;
+        _this4.new_colour = response.data.default_colour;
         console.log(response.data);
       })["catch"](function (error) {});
     },
@@ -6558,7 +6611,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\nspan.circulito{\r\nposition: absolute;\r\nleft:0;\r\nright:0;\r\nmargin-left:auto;\r\nmargin-right:auto;\r\ntop: 0;\r\nmargin-top: 35%;\r\nword-break: break-all;\r\nwhite-space: nowrap;\r\noverflow: hidden;\r\ntext-overflow: ellipsis;\n}\ndiv.circulito{\r\nborder: 1px solid #7b7676;\r\nborder-radius: 50%;\r\nwidth: 100px;\r\nposition: relative;\r\nheight: 100px;\r\nmargin: 10px;\r\ntext-align: center;\r\nword-break: break-all;\n}\ndiv.circulito2 {\r\nposition: absolute;\r\nborder: 1px solid #D3455B;\r\nbackground: #D3455B;\r\ncolor: white;\r\nborder-radius: 50%;\r\nheight: 30px;\r\nwidth: 30px;\r\nfont-size: 1rem;\r\nfont-weight: bold;\r\ntop: 70%;\r\nright: 0;\n}\nbutton > h2{\r\n  line-height: 1;\n}\n.wrapper {\r\ntext-transform: uppercase;\r\nbackground: #ececec;\r\ncolor: #555;\r\nfont-family: \"Gill Sans\", Impact, sans-serif;\r\nfont-size: 20px;\r\nmargin: 100px 75px 10px 75px;\r\npadding: 15px 20px;\r\nposition: relative;\r\ntext-align: center;\r\n-webkit-transform: translateZ(0); /* webkit flicker fix */\r\n-webkit-font-smoothing: antialiased; /* webkit text rendering fix */\n}\n.wrapper .tooltip {\r\n  \r\nbackground: #1496bb;\r\ntop: 100%;\r\ncolor: #fff;\r\ndisplay: block;\r\nleft: 0px;\r\nmargin-top: 5px;\r\nmargin-bottom: 5px;\r\nopacity: 0;\r\npadding: 5px;\r\npointer-events: none;\r\nposition: absolute;\r\nmin-width: 200px;\r\ntransform: translateY(10px);\r\ntransition: all .25s ease-out;\r\n-ms-box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.28);\r\n-o-box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.28);\r\n box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.28);\n}\r\n\r\n/* This bridges the gap so you can mouse into the tooltip without it disappearing */\r\n/* .wrapper .tooltip:before {\r\nbottom: -20px;\r\ncontent: \" \";\r\ndisplay: block;\r\nheight: 200px;\r\nleft: 0;\r\nposition: absolute;\r\nwidth: 100%;\r\n} */\n.wrapper:hover .tooltip {\r\nopacity: 1;\r\npointer-events: auto;\r\ntransform: translateY(0px);\n}\r\n\r\n/* IE can just show/hide with no transition */\n.lte8 .wrapper .tooltip {\r\ndisplay: none;\n}\n.lte8 .wrapper:hover .tooltip {\r\ndisplay: block;\n}\r\n", ""]);
+exports.push([module.i, "\nspan.circulito{\r\nposition: absolute;\r\nleft:0;\r\nright:0;\r\nmargin-left:auto;\r\nmargin-right:auto;\r\ntop: 0;\r\nmargin-top: 35%;\r\nword-break: break-all;\r\nwhite-space: nowrap;\r\noverflow: hidden;\r\ntext-overflow: ellipsis;\n}\ndiv.circulito{\r\nborder: 1px solid #7b7676;\r\nborder-radius: 50%;\r\nwidth: 100px;\r\nposition: relative;\r\nheight: 100px;\r\nmargin: 10px;\r\ntext-align: center;\r\nword-break: break-all;\n}\ndiv.circulito2 {\r\nposition: absolute;\r\nborder: 1px solid #D3455B;\r\nbackground: #D3455B;\r\ncolor: white;\r\nborder-radius: 50%;\r\nheight: 30px;\r\nwidth: 30px;\r\nfont-size: 1rem;\r\nfont-weight: bold;\r\ntop: 70%;\r\nright: 0;\n}\ndiv.circulito3 {\r\nposition: absolute;\r\nborder: 1px solid #28ca3d;\r\nbackground: #28ca3d;\r\ncolor: white;\r\nborder-radius: 50%;\r\nheight: 30px;\r\nwidth: 30px;\r\nfont-size: 1rem;\r\nfont-weight: bold;\r\ntop: 0%;\r\nright: 0;\n}\nbutton > h2{\r\n    text-align: center;\r\n    vertical-align: middle;\r\n    line-height: 20px;\n}\n.wrapper {\r\ntext-transform: uppercase;\r\nbackground: #ececec;\r\ncolor: #555;\r\nfont-family: \"Gill Sans\", Impact, sans-serif;\r\nfont-size: 20px;\r\nmargin: 100px 75px 10px 75px;\r\npadding: 15px 20px;\r\nposition: relative;\r\ntext-align: center;\r\n-webkit-transform: translateZ(0); /* webkit flicker fix */\r\n-webkit-font-smoothing: antialiased; /* webkit text rendering fix */\n}\n.wrapper .tooltip {\r\n  \r\nbackground: #1496bb;\r\ntop: 100%;\r\ncolor: #fff;\r\ndisplay: block;\r\nleft: 0px;\r\nmargin-top: 5px;\r\nmargin-bottom: 5px;\r\nopacity: 0;\r\npadding: 5px;\r\npointer-events: none;\r\nposition: absolute;\r\nmin-width: 200px;\r\ntransform: translateY(10px);\r\ntransition: all .25s ease-out;\r\n-ms-box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.28);\r\n-o-box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.28);\r\n box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.28);\n}\r\n\r\n/* This bridges the gap so you can mouse into the tooltip without it disappearing */\r\n/* .wrapper .tooltip:before {\r\nbottom: -20px;\r\ncontent: \" \";\r\ndisplay: block;\r\nheight: 200px;\r\nleft: 0;\r\nposition: absolute;\r\nwidth: 100%;\r\n} */\n.wrapper:hover .tooltip {\r\nopacity: 1;\r\npointer-events: auto;\r\ntransform: translateY(0px);\n}\r\n\r\n/* IE can just show/hide with no transition */\n.lte8 .wrapper .tooltip {\r\ndisplay: none;\n}\n.lte8 .wrapper:hover .tooltip {\r\ndisplay: block;\n}\r\n", ""]);
 
 // exports
 
@@ -38839,7 +38892,94 @@ var render = function() {
       ]
     ),
     _vm._v(" "),
-    _vm._m(4),
+    _c(
+      "div",
+      {
+        staticClass: "modal fade",
+        attrs: {
+          id: "edit_element",
+          tabindex: "-1",
+          role: "dialog",
+          "aria-labelledby": "edit_element_tittle",
+          "aria-hidden": "true"
+        }
+      },
+      [
+        _c(
+          "div",
+          {
+            staticClass: "modal-dialog modal-dialog-centered",
+            attrs: { role: "document" }
+          },
+          [
+            _c("div", { staticClass: "modal-content" }, [
+              _vm._m(4),
+              _vm._v(" "),
+              _c("div", { staticClass: "modal-body" }, [
+                _c("div", { staticClass: "input-group mb-3" }, [
+                  _vm._m(5),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.edit_name,
+                        expression: "edit_name"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: {
+                      type: "text",
+                      "max-length": "100",
+                      placeholder: "nombre",
+                      "aria-label": "nombre",
+                      "aria-describedby": "basic-addon1"
+                    },
+                    domProps: { value: _vm.edit_name },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.edit_name = $event.target.value
+                      }
+                    }
+                  })
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "modal-footer" }, [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-secondary",
+                    attrs: { type: "button", "data-dismiss": "modal" }
+                  },
+                  [_vm._v("Cerrar")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-primary",
+                    attrs: { type: "button", "data-dismiss": "modal" },
+                    on: {
+                      click: function($event) {
+                        return _vm.update_element(_vm.edit_id, _vm.edit_name)
+                      }
+                    }
+                  },
+                  [_vm._v("Editar elemento")]
+                )
+              ])
+            ])
+          ]
+        )
+      ]
+    ),
+    _vm._v(" "),
+    _vm._m(6),
     _vm._v(" "),
     _vm.elements
       ? _c(
@@ -38896,6 +39036,30 @@ var render = function() {
                                     ])
                                   ]
                                 )
+                              ]),
+                              _vm._v(" "),
+                              _c("div", { staticClass: "circulito3" }, [
+                                _c(
+                                  "button",
+                                  {
+                                    staticClass:
+                                      "btn btn-sm text-light p-0 m-0",
+                                    attrs: {
+                                      "data-toggle": "modal",
+                                      "data-target": "#edit_element"
+                                    },
+                                    on: {
+                                      click: function($event) {
+                                        return _vm.update_modal(
+                                          el.id,
+                                          el.name,
+                                          el.parent
+                                        )
+                                      }
+                                    }
+                                  },
+                                  [_c("i", { staticClass: "fas fa-pen" })]
+                                )
                               ])
                             ]
                           )
@@ -38921,7 +39085,7 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "modal-header" }, [
       _c("h5", { staticClass: "modal-title" }, [
-        _vm._v("Agregar una nueva tarea")
+        _vm._v("Agregar una nuevo elemento")
       ]),
       _vm._v(" "),
       _c(
@@ -38976,6 +39140,37 @@ var staticRenderFns = [
         },
         [_vm._v("Color")]
       )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-header" }, [
+      _c("h5", { staticClass: "modal-title" }, [_vm._v("Editar elemento")]),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "close",
+          attrs: {
+            type: "button",
+            "data-dismiss": "modal",
+            "aria-label": "Close"
+          }
+        },
+        [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "input-group-prepend" }, [
+      _c("span", { staticClass: "input-group-text" }, [
+        _vm._v("Nombre del elemento")
+      ])
     ])
   },
   function() {

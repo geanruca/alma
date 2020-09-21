@@ -73,27 +73,28 @@ class ElementsController extends Controller
 
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $r
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+   
     public function update(Request $r, $id)
     {
-        //
+        $element = Element::find($id);
+        if($r->parent == 0 OR $r->parent == $element->parent){
+            $parent_value = null;
+        }
+
+        $parent = Element::find($r->parent);
+        
+        if($parent){
+            $new_sequence = $parent->sequence + 1;
+            $new_colour   = $parent->colour;
+        }
+        
+        $element->name     = $r->name         ?? $element->name;
+        $element->sequence = $new_sequence    ?? $element->sequence;
+        $element->colour   = $new_colour      ?? '#6DCFF6';
+        $element->parent   = $parent_value    ?? $element->parent;
+        $element->save();
+
+        return response()->json('Guardado!');
     }
 
     /**

@@ -1,11 +1,11 @@
 <template>
   <div class="container-fluid">
-  <!-- Modal -->
+  <!-- Modal create element -->
   <div class="modal fade" id="create_element" tabindex="-1" role="dialog" aria-labelledby="create_element_tittle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">Agregar una nueva tarea</h5>
+          <h5 class="modal-title">Agregar una nuevo elemento</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -51,7 +51,34 @@
       </div>
     </div>
   </div>
-  <!-- fin del modal -->
+  <!-- fin del modal create element -->
+  <!-- Modal edit element -->
+  <div class="modal fade" id="edit_element" tabindex="-1" role="dialog" aria-labelledby="edit_element_tittle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Editar elemento</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text">Nombre del elemento</span>
+            </div>
+            <input v-model="edit_name" type="text" class="form-control" max-length='100' placeholder="nombre" aria-label="nombre" aria-describedby="basic-addon1">
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+          <button type="button" @click='update_element(edit_id, edit_name)' data-dismiss="modal" class="btn btn-primary">Editar elemento</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- fin del modal edit element -->
     <div class="row">
       <div class="col-12 d-inline-block mb-1">
         <button data-toggle="modal" data-target="#create_element" class="btn btn-sm btn-dark rounded float-right">Crear nuevo elemento</button>
@@ -61,7 +88,7 @@
       <div v-for="index in last_sequence" :key="index">
         <div class="d-inline-block" v-for='el in elements' :key="el.id">
           <div  v-if="index == el.sequence" class="d-inline-block circulito wrapper" :style="'background-color:' + el.colour" >
-            <span class="circulito" >
+            <span  class="circulito" >
               {{el.name}}
             </span>
             <div class="tooltip">
@@ -70,6 +97,11 @@
             <div class="circulito2">
               <button  @click='eliminar(el.id)' class="btn btn-sm text-light p-0 m-0">
                 <h2 class="p-0 m-0" >-</h2>
+              </button>
+            </div>
+            <div class="circulito3">
+              <button @click='update_modal(el.id, el.name, el.parent)' data-toggle="modal" data-target="#edit_element" class="btn btn-sm text-light p-0 m-0">
+                <i class="fas fa-pen"></i>
               </button>
             </div>
           </div>
@@ -95,10 +127,14 @@ miniToastr.init();
   export default {
     data() {
       return {
-        elements  : null,
-        new_name  : null,
-        new_colour: '#6DCFF6',
-        new_parent: 0, 
+        elements   : null,
+        elements_edit   : null,
+
+        new_name   : null,
+        new_colour : '#6DCFF6',
+        new_parent : 0, 
+        edit_name  : null, 
+        edit_id: null, 
       }
     },
     mounted(){
@@ -162,6 +198,24 @@ miniToastr.init();
           miniToastr.error(error, 'error')
         })
 
+      },
+      update_element(id, name){
+        let formData = new FormData();
+            formData.append('name',name);
+            formData.append('_method','PATCH');
+        axios.post('api/elements/'+id, formData)
+        .then(response=>{
+            miniToastr.success(response.msg, 'Elemento ingresado')
+            this.get_elements()
+        })
+        .catch(error => {
+          miniToastr.error(error, 'error')
+        })
+
+      },
+      update_modal(id, nombre, padre){
+        this.edit_id   = id
+        this.edit_name   = nombre
       },
       eliminar(id){
         var formData2 = new FormData();
@@ -245,8 +299,23 @@ font-weight: bold;
 top: 70%;
 right: 0;
 }
+div.circulito3 {
+position: absolute;
+border: 1px solid #28ca3d;
+background: #28ca3d;
+color: white;
+border-radius: 50%;
+height: 30px;
+width: 30px;
+font-size: 1rem;
+font-weight: bold;
+top: 0%;
+right: 0;
+}
 button > h2{
-  line-height: 1;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 20px;
 }
 .wrapper {
 text-transform: uppercase;
