@@ -77,11 +77,7 @@ class ElementsController extends Controller
     public function update(Request $r, $id)
     {
         $element = Element::find($id);
-        if($r->parent == 0 OR $r->parent == $element->parent){
-            $parent_value = null;
-        }
-
-        $parent = Element::find($r->parent);
+        $parent = Element::find($element->parent);
         
         if($parent){
             $new_sequence = $parent->sequence + 1;
@@ -91,7 +87,7 @@ class ElementsController extends Controller
         $element->name     = $r->name         ?? $element->name;
         $element->sequence = $new_sequence    ?? $element->sequence;
         $element->colour   = $new_colour      ?? '#6DCFF6';
-        $element->parent   = $parent_value    ?? $element->parent;
+        $element->parent   = $element->parent;
         $element->save();
 
         return response()->json('Guardado!');
