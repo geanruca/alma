@@ -86,7 +86,6 @@ class ElementsController extends Controller
         if($parent){
             $new_sequence = $parent->sequence + 1;
             $new_colour   = $parent->colour;
-            // dd($new_colour);
         }
         $element->name     = $r->name         ?? $element->name;
         $element->sequence = $new_sequence    ?? $element->sequence;
