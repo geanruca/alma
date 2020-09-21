@@ -55,7 +55,7 @@ class ElementsController extends Controller
         }
         $last_id  = Element::orderBy('id', 'desc')->first();
         if($last_id){
-            $last_id = $last_id->id;
+            $last_id = $last_id->id ?? 1;
         }
         $parent = Element::find($r->parent);
         if($parent){
@@ -77,13 +77,17 @@ class ElementsController extends Controller
     public function update(Request $r, $id)
     {
         $element = Element::find($id);
+        if($r->parent == 0 ){
+            $parent_value = null;
+        }
+
         $parent = Element::find($element->parent);
         
         if($parent){
             $new_sequence = $parent->sequence + 1;
             $new_colour   = $parent->colour;
+            // dd($new_colour);
         }
-        
         $element->name     = $r->name         ?? $element->name;
         $element->sequence = $new_sequence    ?? $element->sequence;
         $element->colour   = $new_colour      ?? '#6DCFF6';
